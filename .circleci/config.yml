@@ -9,6 +9,7 @@ jobs:
       - run: |
           npm i -g npm
           npm i -g @mehulagg/w3 
+          npm i -g ipfs-car
       - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
       
       - run: 
@@ -20,12 +21,13 @@ jobs:
             rm -f *.pack objects/pack/*
           no_output_timeout: 1h
           name: Unpack objects
-      - run: 
-          command: |
-            w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
-            w3 put --no-wrap gitlab.git  
-          name: Upload to web3
-          no_output_timeout: 2h
+      - run: ipfs-car --pack ./gitlab.git
+#       - run: 
+#           command: |
+#             w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
+#             w3 put --no-wrap gitlab.git  
+#           name: Upload to web3
+#           no_output_timeout: 2h
 
 workflows:
   version: 2.1
