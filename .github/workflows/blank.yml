@@ -22,7 +22,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
 #       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
+      - name: install w3 cli
+        run: npm i -g @mehulagg/w3
+        
       - name: Clone gitlab repo
         run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
       
@@ -34,15 +36,20 @@ jobs:
           git unpack-objects < *.pack
           rm -f *.pack objects/pack/*
           
-      - uses: web3-storage/add-to-web3@v1
-        id: web3
-        with:
-          web3_token: ${{ secrets.WEB3_STORAGE_TOKEN }}
-          path_to_add: 'gitlab.git'
-          web3_api: 'https://api-staging.web3.storage/'
+      - name: uplaod to web3.storage
+        run: |
+          w3 token --api 'https://api-staging.web3.storage' --token ${{ secrets.WEB3_STORAGE_TOKEN }}
+          w3 put --no-wrap gitlab.git
+          
+#       - uses: web3-storage/add-to-web3@v1
+#         id: web3
+#         with:
+#           web3_token: ${{ secrets.WEB3_STORAGE_TOKEN }}
+#           path_to_add: 'gitlab.git'
+#           web3_api: 'https://api-staging.web3.storage/'
 
-      # "bafkreicysg23kiwv34eg2d7qweipxwosdo2py4ldv42nbauguluen5v6am"
-      - run: echo ${{ steps.web3.outputs.cid }}
+#       # "bafkreicysg23kiwv34eg2d7qweipxwosdo2py4ldv42nbauguluen5v6am"
+#       - run: echo ${{ steps.web3.outputs.cid }}
 
-      # "https://dweb.link/ipfs/bafkreicysg23kiwv34eg2d7qweipxwosdo2py4ldv42nbauguluen5v6am"
-      - run: echo ${{ steps.web3.outputs.url }}
+#       # "https://dweb.link/ipfs/bafkreicysg23kiwv34eg2d7qweipxwosdo2py4ldv42nbauguluen5v6am"
+#       - run: echo ${{ steps.web3.outputs.url }}
