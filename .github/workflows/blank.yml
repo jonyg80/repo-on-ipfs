@@ -24,11 +24,11 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Clone gitlab repo
-        run: git clone --bare https://gitlab.com/gitlab-org/gitlab
+        run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
       
       - name: unpack objects
         run: |
-          cd gitlab
+          cd gitlab.git
           git update-server-info
           mv objects/pack/*.pack .
           git unpack-objects < *.pack
@@ -38,7 +38,7 @@ jobs:
         id: web3
         with:
           web3_token: ${{ secrets.WEB3_STORAGE_TOKEN }}
-          path_to_add: 'gitlab'
+          path_to_add: 'gitlab.git'
           web3_api: 'https://api-staging.web3.storage/'
 
       # "bafkreicysg23kiwv34eg2d7qweipxwosdo2py4ldv42nbauguluen5v6am"
