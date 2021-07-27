@@ -23,6 +23,7 @@ jobs:
           name: Unpack objects
       - run: 
           command: |
+            du -sh ./gitlab.git
             ipfs-car --pack ./gitlab.git
           no_output_timeout: 2h
 
