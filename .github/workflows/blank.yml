@@ -23,7 +23,9 @@ jobs:
 #       - uses: actions/checkout@v2
 
       - name: install w3 cli
-        run: npm i -g @mehulagg/w3
+        run: |
+          npm i -g npm
+          npm i -g @mehulagg/w3
         
       - name: Clone gitlab repo
         run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
