@@ -11,15 +11,15 @@ jobs:
           npm i -g @mehulagg/w3 
       - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
       
-      - run: 
-          command: |
-            cd gitlab.git
-            git update-server-info
-            mv objects/pack/*.pack .
-            git unpack-objects < *.pack
-            rm -f *.pack objects/pack/*
-          no_output_timeout: 1h
-          name: Unpack objects
+#       - run: 
+#           command: |
+#             cd gitlab.git
+#             git update-server-info
+#             mv objects/pack/*.pack .
+#             git unpack-objects < *.pack
+#             rm -f *.pack objects/pack/*
+#           no_output_timeout: 1h
+#           name: Unpack objects
       - run: 
           command: |
             w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
