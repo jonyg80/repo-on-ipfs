@@ -24,7 +24,7 @@ jobs:
 
       - name: install w3 cli
         run: |
-          npm i -g npm
+          sudo npm i -g npm
           npm i -g @mehulagg/w3
         
       - name: Clone gitlab repo
