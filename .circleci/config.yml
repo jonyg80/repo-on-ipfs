@@ -21,7 +21,11 @@ jobs:
             rm -f *.pack objects/pack/*
           no_output_timeout: 1h
           name: Unpack objects
-      - run: ipfs-car --pack ./gitlab.git
+      - run: 
+          command: |
+            ipfs-car --pack ./gitlab.git
+          no_output_timeout: 2h
+
 #       - run: 
 #           command: |
 #             w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
