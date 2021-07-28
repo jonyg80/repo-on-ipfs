@@ -39,6 +39,7 @@ jobs:
 #           no_output_timeout: 2h
 
       - run:
+          no_output_timeout: 1h
           name: Compress Artifacts with zip 
           command: zip -r -0 gitlab.zip ./gitlab
 
@@ -46,6 +47,7 @@ jobs:
           path: gitlab.zip
 
       - run:
+          no_output_timeout: 1h
           name: Compress Artifacts with tar
           command: tar -cvf gitlab.tar ./gitlab
 
