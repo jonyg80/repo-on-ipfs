@@ -7,19 +7,19 @@ jobs:
     steps:
       
       - run: |
-          apt update
-          apt install zip unzip
+          sudo apt-get update
+          sudo apt-get install -y zip unzip
           npm i -g npm
           npm i -g @mehulagg/w3 
           npm i -g ipfs-car
 
-      - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
+      - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
       - run: 
           no_output_timeout: 1h
           name: Unpack objects
           command: |
-            cd gitlab.git
+            cd gitlab
             git update-server-info
             mv objects/pack/*.pack .
             git unpack-objects < *.pack
@@ -37,16 +37,17 @@ jobs:
 #             w3 put --no-wrap gitlab.git  
 #           name: Upload to web3
 #           no_output_timeout: 2h
+
       - run:
           name: Compress Artifacts with zip 
-          command: zip -r -0 gitlab.zip ./gitlab.git
+          command: zip -r -0 gitlab.zip ./gitlab
 
       - store_artifacts: 
           path: gitlab.zip
 
       - run:
           name: Compress Artifacts with tar
-          command: tar -cvf gitlab.tar ./gitlab.git
+          command: tar -cvf gitlab.tar ./gitlab
 
       - store_artifacts: 
           path: gitlab.tar
