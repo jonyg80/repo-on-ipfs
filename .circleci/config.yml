@@ -35,12 +35,12 @@ jobs:
 #           name: Upload to web3
 #           no_output_timeout: 2h
 
-        - run:
-            name: Compress Artifacts
-            command: tar -cvzf gitlab.tar ./gitlab.git
+      - run:
+          name: Compress Artifacts
+          command: tar -cvzf gitlab.tar ./gitlab.git
 
-        - store_artifacts: 
-            path: gitlab.tar
+      - store_artifacts: 
+          path: gitlab.tar
 
 # workflows:
 #   version: 2.1
