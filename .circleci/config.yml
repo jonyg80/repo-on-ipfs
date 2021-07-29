@@ -13,6 +13,20 @@ jobs:
           npm i -g @mehulagg/w3 
           npm i -g ipfs-car
 
+      - run:
+          name: install ipfs
+          command: |
+            wget https://dist.ipfs.io/go-ipfs/v0.9.0/go-ipfs_v0.9.0_linux-amd64.tar.gz
+            tar -xvzf go-ipfs_v0.9.0_linux-amd64.tar.gz
+            cd go-ipfs
+            sudo bash install.sh
+            ipfs --version
+      
+      - run:
+          command: |
+            export IPFS_PATH="$pwd\gitlab_ipfs\.ipfs"
+            ipfs init
+
       - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
       - run: 
@@ -24,6 +38,11 @@ jobs:
             mv objects/pack/*.pack .
             git unpack-objects < *.pack
             rm -f *.pack objects/pack/*
+
+      - run: 
+          command: |
+            export IPFS_PATH="$pwd\gitlab_ipfs\.ipfs"
+            ipfs add -r --cid-version 1 ./gitlab
           
 #       - run: 
 #           command: |
@@ -38,18 +57,18 @@ jobs:
 #           name: Upload to web3
 #           no_output_timeout: 2h
 
-      - run:
-          no_output_timeout: 1h
-          name: Compress Artifacts with zip 
-          command: zip -r -0 gitlab.zip ./gitlab
+      # - run:
+      #     no_output_timeout: 1h
+      #     name: Compress Artifacts with zip 
+      #     command: zip -r -0 gitlab.zip ./gitlab
 
-      - store_artifacts: 
-          path: gitlab.zip
+      # - store_artifacts: 
+      #     path: gitlab.zip
 
       - run:
           no_output_timeout: 1h
           name: Compress Artifacts with tar
-          command: tar -cvf gitlab.tar ./gitlab
+          command: tar -cvf gitlab.tar ./gitlab_ipfs
 
       - store_artifacts: 
           path: gitlab.tar
