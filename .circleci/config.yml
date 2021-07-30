@@ -25,18 +25,19 @@ jobs:
       - run:
           command: |
             pwd
-            export IPFS_PATH=$(pwd)/gitlab_ipfs/.ipfs
+            mkdir $(pwd)/gitlab_ipfs
+            export IPFS_PATH="$(pwd)/gitlab_ipfs/.ipfs"
             ipfs init
 
       - run: |
-          cd $pwd/gitlab_ipfs
+          cd "$(pwd)/gitlab_ipfs"
           git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
       - run: 
           no_output_timeout: 1h
           name: Unpack objects
           command: |
-            cd $pwd\gitlab_ipfs\gitlab
+            cd "$(pwd)/gitlab_ipfs/gitlab"
             git update-server-info
             mv objects/pack/*.pack .
             git unpack-objects < *.pack
@@ -44,8 +45,8 @@ jobs:
 
       - run: 
           command: |
-            cd $pwd/gitlab_ipfs
-            export IPFS_PATH="$pwd\gitlab_ipfs\.ipfs"
+            cd "$(pwd)/gitlab_ipfs"
+            export IPFS_PATH="$(pwd)/gitlab_ipfs/.ipfs"
             ipfs add -r --nocopy --cid-version 1 ./gitlab
           
 #       - run: 
