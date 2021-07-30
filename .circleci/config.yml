@@ -28,6 +28,8 @@ jobs:
             mkdir $(pwd)/gitlab_ipfs
             export IPFS_PATH="$(pwd)/gitlab_ipfs/.ipfs"
             ipfs init
+            cd "$(pwd)/gitlab_ipfs"
+            pwd
 
       - run: |
           cd "$(pwd)/gitlab_ipfs"
