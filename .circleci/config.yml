@@ -9,21 +9,22 @@ jobs:
       - run: |
           npm i -g npm
           npm i -g @mehulagg/w3 
-      - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
+      - run: git clone --bare https://github.com/microsoft/vscode.git repo
       
-#       - run: 
-#           command: |
-#             cd gitlab.git
-#             git update-server-info
-#             mv objects/pack/*.pack .
-#             git unpack-objects < *.pack
-#             rm -f *.pack objects/pack/*
-#           no_output_timeout: 1h
-#           name: Unpack objects
+      - run: 
+          command: |
+            cd repo
+            git update-server-info
+            mv objects/pack/*.pack .
+            git unpack-objects < *.pack
+            rm -f *.pack objects/pack/*
+          no_output_timeout: 1h
+          name: Unpack objects
+          
       - run: 
           command: |
             w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
-            w3 put --no-wrap gitlab.git  
+            w3 put --no-wrap repo 
           name: Upload to web3
           no_output_timeout: 2h
 
@@ -32,7 +33,7 @@ workflows:
   build:
     triggers:
       - schedule:
-          cron: "0 0,6,12,18 * * *"
+          cron: "0 1,7,13,19 * * *"
           filters:
             branches:
               only:
