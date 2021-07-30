@@ -24,7 +24,8 @@ jobs:
       
       - run:
           command: |
-            export IPFS_PATH=$pwd/gitlab_ipfs/.ipfs
+            pwd
+            export IPFS_PATH=$(pwd)/gitlab_ipfs/.ipfs
             ipfs init
 
       - run: |
