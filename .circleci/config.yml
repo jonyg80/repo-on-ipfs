@@ -49,6 +49,7 @@ jobs:
           command: |
             cd /home/circleci/project/gitlab_ipfs
             export IPFS_PATH=/home/circleci/project/gitlab_ipfs/.ipfs
+            ipfs config --json Experimental.ShardingEnabled true
             ipfs add -r --nocopy --cid-version 1 ./gitlab
           
 #       - run: 
