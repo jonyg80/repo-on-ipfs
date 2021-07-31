@@ -37,6 +37,6 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - fluentui
     jobs:
       - build
