@@ -1,19 +1,13 @@
 version: 2.1
 jobs:
   build:
-    machine:
-      image: ubuntu-2004:202104-01
+    docker: 
+      - image: cimg/node:16.6.0
     
     steps:
       - run: |
-          ulimit -n
-      - run: |
-          sudo ulimit -n 10000000000
-      - run: |
-          ulimit -n
-      - run: |
-          npm i -g npm
-          npm i -g @mehulagg/w3 
+          sudo npm i -g npm
+          sudo npm i -g @mehulagg/w3 
       - run: git clone --bare https://github.com/microsoft/vscode.git repo
       
       - run: 
@@ -33,15 +27,15 @@ jobs:
           name: Upload to web3
           no_output_timeout: 2h
 
-workflows:
-  version: 2.1
-  build:
-    triggers:
-      - schedule:
-          cron: "0 1,7,13,19 * * *"
-          filters:
-            branches:
-              only:
-                - vscode
-    jobs:
-      - build
+# workflows:
+#   version: 2.1
+#   build:
+#     triggers:
+#       - schedule:
+#           cron: "0 1,7,13,19 * * *"
+#           filters:
+#             branches:
+#               only:
+#                 - vscode
+#     jobs:
+#       - build
