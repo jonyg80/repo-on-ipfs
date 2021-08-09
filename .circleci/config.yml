@@ -12,7 +12,12 @@ jobs:
       #     npm i -g npm
       #     npm i -g @mehulagg/w3 
       #     npm i -g ipfs-car
-
+      - run: |
+          ulimit -n
+      - run: |
+          sudo ulimit -n 100000000
+      - run: |
+          ulimit -n
       - run:
           name: install ipfs
           command: |
