@@ -13,8 +13,8 @@ jobs:
       #     npm i -g @mehulagg/w3 
       #     npm i -g ipfs-car
       - run: |
-          echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/system.conf
-          echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/user.conf
+          sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/system.conf
+          sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/user.conf
       - run: |
           ulimit -n
       - run:
