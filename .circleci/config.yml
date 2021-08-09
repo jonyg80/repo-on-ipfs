@@ -7,7 +7,7 @@ jobs:
     steps:
       - run: |
           sudo npm i -g npm
-          sudo npm i -g @mehulagg/w3 
+          sudo npm i -g @web3-storage/w3 
       - run: git clone --bare https://github.com/microsoft/vscode.git repo
       
       - run: 
