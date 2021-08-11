@@ -6,41 +6,41 @@ jobs:
     
     steps:
       
-      # - run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y zip unzip
-      #     npm i -g npm
-      #     npm i -g @mehulagg/w3 
-      #     npm i -g ipfs-car
       - run: |
-          sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/system.conf
-          sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/user.conf
-      - run: |
-          ulimit -n
-      - run:
-          name: install ipfs
-          command: |
-            wget https://dist.ipfs.io/go-ipfs/v0.9.0/go-ipfs_v0.9.0_linux-amd64.tar.gz
-            tar -xvzf go-ipfs_v0.9.0_linux-amd64.tar.gz
-            cd go-ipfs
-            sudo bash install.sh
-            ipfs --version
+          sudo apt-get update
+          sudo apt-get install -y zip unzip
+          npm i -g npm
+          npm i -g @mehulagg/w3 
+          npm i -g ipfs-car
+#       - run: |
+#           sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/system.conf
+#           sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/user.conf
+#       - run: |
+#           ulimit -n
+#       - run:
+#           name: install ipfs
+#           command: |
+#             wget https://dist.ipfs.io/go-ipfs/v0.9.0/go-ipfs_v0.9.0_linux-amd64.tar.gz
+#             tar -xvzf go-ipfs_v0.9.0_linux-amd64.tar.gz
+#             cd go-ipfs
+#             sudo bash install.sh
+#             ipfs --version
       
       - run:
           command: |
             pwd
             mkdir /home/circleci/project/gitlab_ipfs
-            export IPFS_PATH=/home/circleci/project/gitlab_ipfs/.ipfs
-            ipfs init
-            cd /home/circleci/project/gitlab_ipfs
-            pwd
+#             export IPFS_PATH=/home/circleci/project/gitlab_ipfs/.ipfs
+#             ipfs init
+#             cd /home/circleci/project/gitlab_ipfs
+#             pwd
 
       - run: |
-          cd /home/circleci/project/gitlab_ipfs
+          cd gitlab_ipfs
           git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
       - run: 
-          no_output_timeout: 1h
+          no_output_timeout: 4h
           name: Unpack objects
           command: |
             cd /home/circleci/project/gitlab_ipfs/gitlab
@@ -49,19 +49,19 @@ jobs:
             git unpack-objects < *.pack
             rm -f *.pack objects/pack/*
 
-      - run: 
-          command: |
-            cd /home/circleci/project/gitlab_ipfs
-            export IPFS_PATH=/home/circleci/project/gitlab_ipfs/.ipfs
-            ipfs config --json Experimental.FilestoreEnabled true
-            ipfs config --json Experimental.ShardingEnabled true
-            ipfs add -r --nocopy --cid-version 1 ./gitlab
-          
 #       - run: 
 #           command: |
-#             du -sh ./gitlab.git
-#             ipfs-car --pack ./gitlab.git
-#           no_output_timeout: 2h
+#             cd /home/circleci/project/gitlab_ipfs
+#             export IPFS_PATH=/home/circleci/project/gitlab_ipfs/.ipfs
+#             ipfs config --json Experimental.FilestoreEnabled true
+#             ipfs config --json Experimental.ShardingEnabled true
+#             ipfs add -r --nocopy --cid-version 1 ./gitlab
+          
+      - run: 
+          command: |
+            du -sh ./gitlab_ipfs
+            ipfs-car --pack ./gitlab_ipfs
+          no_output_timeout: 4h
 
 #       - run: 
 #           command: |
@@ -78,13 +78,13 @@ jobs:
       # - store_artifacts: 
       #     path: gitlab.zip
 
-      - run:
-          no_output_timeout: 1h
-          name: Compress Artifacts with tar
-          command: tar -cvf gitlab.tar ./gitlab_ipfs
+#       - run:
+#           no_output_timeout: 1h
+#           name: Compress Artifacts with tar
+#           command: tar -cvf gitlab.tar ./gitlab_ipfs
 
       - store_artifacts: 
-          path: gitlab.tar
+          path: gitlab_ipfs.car
       
       
 
