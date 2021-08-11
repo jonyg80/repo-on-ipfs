@@ -11,7 +11,7 @@ jobs:
           sudo apt-get install -y zip unzip
           sudo npm i -g npm
           sudo npm i -g @mehulagg/w3 
-          sudo npm i -g ipfs-car
+          sudo npm i -g ipfs-car@0.4.3
 #       - run: |
 #           sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/system.conf
 #           sudo echo "DefaultLimitNOFILE=10000000000">>/etc/systemd/user.conf
