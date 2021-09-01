@@ -1,41 +1,60 @@
 version: 2.1
 jobs:
   build:
-    machine:
-      image: ubuntu-2004:202104-01
+    docker:
+      - image: cimg/python:3.9.6
     
     steps:
+
+      - run: | 
+          npm i -g npm 
+          npm i -g @mehulagg/w3    
+   
+      - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
-      - run: |
-          npm i -g npm
-          npm i -g @mehulagg/w3 
-      - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git
+      - run: 
+          command: |
+            cd gitlab
+            git update-server-info
+            mv objects/pack/*.pack .
+            git unpack-objects < *.pack
+            rm -f *.pack objects/pack/*
+          no_output_timeout: 1h
+          name: Unpack objects
+          
+      - run:
+          name: install ipfs
+          command: |
+            wget https://dist.ipfs.io/go-ipfs/v0.9.1/go-ipfs_v0.9.1_linux-amd64.tar.gz
+            tar -xvzf go-ipfs_v0.9.1_linux-amd64.tar.gz
+            cd go-ipfs
+            sudo bash install.sh
+            ipfs --version
+            
+      - run: ipfs init
       
-#       - run: 
-#           command: |
-#             cd gitlab.git
-#             git update-server-info
-#             mv objects/pack/*.pack .
-#             git unpack-objects < *.pack
-#             rm -f *.pack objects/pack/*
-#           no_output_timeout: 1h
-#           name: Unpack objects
+      - run:
+          command: |
+            CID=$(ipfs add -s buzhash --cid-version 1 -r -H ./gitlab)
+            echo "CID = ${CID}" 
+            ipfs dag export --progress=false -- ${CID} > git.car 
+          no_output_timeout: 5h
       - run: 
           command: |
             w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
-            w3 put --no-wrap gitlab.git  
+            w3 put-car --name "gitlab" ./git.car
           name: Upload to web3
-          no_output_timeout: 2h
+          no_output_timeout: 3h
 
-# workflows:
-#   version: 2.1
-#   build:
-#     triggers:
-#       - schedule:
-#           cron: "0 0,6,12,18 * * *"
-#           filters:
-#             branches:
-#               only:
-#                 - main
-#     jobs:
-#       - build
+workflows:
+  version: 2.1
+  build:
+    triggers:
+      - schedule:
+          cron: "0 0,6,12,18 * * *"
+          filters:
+            branches:
+              only:
+                - buzhash
+    jobs:
+      - build
