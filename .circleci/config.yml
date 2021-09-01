@@ -80,8 +80,7 @@ jobs:
 #           no_output_timeout: 2h
 
 workflows:
-  version: 2.1
-#   build:
+  build:
 #     triggers:
 #       - schedule:
 #           cron: "0 0,6,12,18 * * *"
