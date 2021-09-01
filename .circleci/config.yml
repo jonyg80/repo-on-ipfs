@@ -28,15 +28,15 @@ jobs:
           name: Upload to web3
           no_output_timeout: 2h
 
-workflows:
-  version: 2.1
-  build:
-    triggers:
-      - schedule:
-          cron: "0 2,8,14,20 * * *"
-          filters:
-            branches:
-              only:
-                - fluentui
-    jobs:
-      - build
+# workflows:
+#   version: 2.1
+#   build:
+#     triggers:
+#       - schedule:
+#           cron: "0 2,8,14,20 * * *"
+#           filters:
+#             branches:
+#               only:
+#                 - fluentui
+#     jobs:
+#       - build
