@@ -1,14 +1,11 @@
 version: 2.1
 jobs:
   rabin:
-    machine:
-      image: ubuntu-2004:202104-01
+    docker:
+      - image: ubuntu:latest
     
     steps:
       
-      - run: |
-          npm i -g npm
-          npm i -g @mehulagg/w3 
       - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
       - run: 
@@ -38,14 +35,11 @@ jobs:
          
          
   buzhash:
-    machine:
-      image: ubuntu-2004:202104-01
+    docker:
+      - image: ubuntu:latest
     
     steps:
       
-      - run: |
-          npm i -g npm
-          npm i -g @mehulagg/w3 
       - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
       - run: 
@@ -72,6 +66,41 @@ jobs:
       - run:
           command: |
             ipfs add -s buzhash --cid-version 1 -r -H ./gitlab
+
+  splitter:
+    docker:
+      - image: ubuntu:latest
+    
+    steps:
+      
+      - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
+      
+      - run: 
+          command: |
+            cd gitlab
+            git update-server-info
+            mv objects/pack/*.pack .
+            git unpack-objects < *.pack
+            rm -f *.pack objects/pack/*
+          no_output_timeout: 1h
+          name: Unpack objects
+          
+      - run:
+          name: install ipfs
+          command: |
+            wget https://dist.ipfs.io/go-ipfs/v0.9.1/go-ipfs_v0.9.1_linux-amd64.tar.gz
+            tar -xvzf go-ipfs_v0.9.1_linux-amd64.tar.gz
+            cd go-ipfs
+            sudo bash install.sh
+            ipfs --version
+            
+      - run: ipfs init
+      
+      - run:
+          command: |
+            ipfs add -s rabin --cid-version 1 -r -H ./gitlab
+ 
+
 #       - run: 
 #           command: |
 #             w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
@@ -91,3 +120,4 @@ workflows:
     jobs:
       - rabin
       - buzhash
+      - splitter
