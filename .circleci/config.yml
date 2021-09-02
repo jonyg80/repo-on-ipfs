@@ -7,8 +7,8 @@ jobs:
     steps:
 
       - run: | 
-          npm i -g npm 
-          npm i -g @mehulagg/w3    
+          sudo npm i -g npm 
+          sudo npm i -g @mehulagg/w3    
    
       - run: git clone --bare https://gitlab.com/gitlab-org/gitlab.git gitlab
       
@@ -35,7 +35,7 @@ jobs:
       
       - run:
           command: |
-            CID=$(ipfs add -s buzhash --cid-version 1 -r -H ./gitlab)
+            CID=$(ipfs add -s buzhash --cid-version 1 --quieter -r -H ./gitlab)
             echo "CID = ${CID}" 
             ipfs dag export --progress=false -- ${CID} > git.car 
           no_output_timeout: 5h
