@@ -35,7 +35,7 @@ jobs:
       
       - run:
           command: |
-            CID=$(ipfs add -s buzhash --cid-version 1 --pin false --quieter -r -H ./gitlab)
+            CID=$(ipfs add -s buzhash --cid-version 1 --pin=false --quieter -r -H ./gitlab)
             echo "CID = ${CID}" 
             ipfs dag export --progress=false -- ${CID} > git.car 
           no_output_timeout: 5h
