@@ -39,6 +39,10 @@ jobs:
             echo "CID = ${CID}" 
             ipfs dag export --progress=false -- ${CID} > git.car 
           no_output_timeout: 5h
+          
+      - store_artifacts: 
+          path: git.car
+          
       - run: 
           command: |
             w3 token --api 'https://api-staging.web3.storage' --token $WEB3_STORAGE_TOKEN
