@@ -40,6 +40,9 @@ jobs:
             ipfs dag export --progress=false -- ${CID} > git.car 
           no_output_timeout: 5h
           
+      - store_artifacts: 
+          path: git.car
+          
       - run: |
           rm -rf ./gitlab
           ipfs repo gc
